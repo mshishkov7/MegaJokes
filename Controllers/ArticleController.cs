@@ -11,6 +11,7 @@ namespace Blog.Controllers
 {
     public class ArticleController : Controller
     {
+        
         //
         // GET: Article
         public ActionResult Index()
@@ -56,6 +57,7 @@ namespace Blog.Controllers
         }
         //
         // GET: Article/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -64,6 +66,7 @@ namespace Blog.Controllers
         //
         //POST: Article/Create
         [HttpPost]
+        [Authorize]
         public ActionResult Create(Article article)
         {
             if (ModelState.IsValid)
@@ -106,9 +109,9 @@ namespace Blog.Controllers
                     .First();
 
                 //Check if article exist
-                if (article == null)
+                if (!IsUserAuthorizedToEdit(article))
                 {
-                    return HttpNotFound();
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
                 // pass article to view
                 return View(article);
@@ -144,10 +147,75 @@ namespace Blog.Controllers
 
                 //Redirect to index page
                 return RedirectToAction("Index");
-
             }
-            
         }
+
+        //
+        // GET: Article/Edit
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            using (var database = new BlogDbContext())
+            {
+                //Get Article from database
+                var article = database.Articles
+                    .Where(a => a.Id == id)
+                    .First();
+
+                //Check if article exist
+                if (!IsUserAuthorizedToEdit(article))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+                // create a view model
+                var model = new ArticleViewModel();
+                model.Id = article.Id;
+                model.Title = article.Title;
+                model.Content = article.Content;
+
+                //pass the view model to view
+                return View(model);
+            }
+        }
+        //
+        // POST: Article/Edit
+        [HttpPost]
+        public ActionResult Edit(ArticleViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var database = new BlogDbContext())
+                {
+                    //Get Article from database
+                    var article = database.Articles
+                        .FirstOrDefault(a => a.Id == model.Id);
+                    //set prop
+                    article.Title = model.Title;
+                    article.Content = model.Content;
+
+                    //save article
+                    database.Entry(article).State = EntityState.Modified;
+                    database.SaveChanges();
+
+                    //redirect
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(model);
+        }
+
+        private bool IsUserAuthorizedToEdit(Article article)
+        {
+            bool isAdmin = this.User.IsInRole("Admin");
+            bool isAuthor = article.IsAuthor(this.User.Identity.Name);
+
+            return isAdmin || isAuthor;
+        }
+
 
     }
 }
