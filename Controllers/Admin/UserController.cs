@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Blog.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         // GET: User
