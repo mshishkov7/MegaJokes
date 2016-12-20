@@ -11,7 +11,7 @@ namespace Blog.Controllers
 {
     public class ArticleController : Controller
     {
-        
+
         //
         // GET: Article
         public ActionResult Index()
@@ -60,14 +60,22 @@ namespace Blog.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            return View();
+            using (var database = new BlogDbContext())
+            {
+                var model = new ArticleViewModel();
+                model.Categories = database.Categories
+                    .OrderBy(c => c.Name)
+                    .ToList();
+
+                return View(model);
+            }
         }
 
         //
         //POST: Article/Create
         [HttpPost]
         [Authorize]
-        public ActionResult Create(Article article)
+        public ActionResult Create(ArticleViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -77,8 +85,10 @@ namespace Blog.Controllers
                         .Where(u => u.UserName == this.User.Identity.Name)
                         .First()
                         .Id;
-                    //set articles author
-                    article.AuthorId = authorId;
+
+                    var article = new Article(
+                        authorId, model.Title, 
+                        model.Content, model.CategoryId);
 
                     // save article in db
                     database.Articles.Add(article);
@@ -88,7 +98,7 @@ namespace Blog.Controllers
                 }
             }
 
-            return View(article);
+            return View(model);
         }
 
         //
@@ -125,7 +135,7 @@ namespace Blog.Controllers
         {
             if (id == null)
             {
-                return  new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             using (var database = new BlogDbContext())
             {
@@ -176,6 +186,9 @@ namespace Blog.Controllers
                 model.Id = article.Id;
                 model.Title = article.Title;
                 model.Content = article.Content;
+                model.CategoryId = article.CategoryId;
+                model.Categories = database.Categories
+                    .OrderBy(c => c.Name).ToList();
 
                 //pass the view model to view
                 return View(model);
@@ -196,6 +209,7 @@ namespace Blog.Controllers
                     //set prop
                     article.Title = model.Title;
                     article.Content = model.Content;
+                    article.CategoryId = model.CategoryId;
 
                     //save article
                     database.Entry(article).State = EntityState.Modified;
@@ -216,6 +230,7 @@ namespace Blog.Controllers
             return isAdmin || isAuthor;
         }
 
-
+        //
+        //GET:
     }
 }

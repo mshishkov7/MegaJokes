@@ -17,6 +17,15 @@ namespace Blog.Models
         [Required]
         public string Content { get; set; }
 
+        public List<Category> Categories { get; set; }
+
         public string AuthorId { get; set; }
+
+        [Required]
+        public int CategoryId { get; set; }
+
+        public ICollection<Article> Articles { get; set; }
+
+
     }
 }
