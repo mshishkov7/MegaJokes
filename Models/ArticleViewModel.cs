@@ -26,6 +26,6 @@ namespace Blog.Models
 
         public ICollection<Article> Articles { get; set; }
 
-
+        public string Tags { get; set; }
     }
 }

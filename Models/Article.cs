@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Dynamic;
 using System.Linq;
 using System.Web;
 
@@ -9,8 +10,18 @@ namespace Blog.Models
 {
     public class Article
     {
+        private ICollection<Tag> tags;
+
+        public virtual ICollection<Tag> Tags
+        {
+            get { return this.tags; }
+            set { this.tags = value; }
+        }
+        
+    
         public Article()
         {
+            this.tags = new HashSet<Tag>();
         }
 
         public Article(string authorId, string title, string content, int categoryId)
@@ -19,6 +30,7 @@ namespace Blog.Models
             this.Title = title;
             this.Content = content;
             this.CategoryId = categoryId;
+            this.tags = new HashSet<Tag>();
         }
 
         [Key]
@@ -45,6 +57,8 @@ namespace Blog.Models
         public int CategoryId { get; set; } 
 
         public virtual Category Category { get; set; }
+
+       
 
     }
 }
