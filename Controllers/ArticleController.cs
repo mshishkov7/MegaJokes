@@ -168,7 +168,8 @@ namespace Blog.Controllers
                 database.SaveChanges();
 
                 //Redirect to index page
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", article);
+
             }
         }
 
@@ -230,7 +231,7 @@ namespace Blog.Controllers
                     database.SaveChanges();
 
                     //redirect
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", article);
                 }
             }
             return View(model);
