@@ -1,9 +1,12 @@
-﻿@model Blog.Models.Article
+﻿@using Blog.Models
+@model Blog.Models.Article
 
 @{
     ViewBag.Title = "Details";
 }
-
+<hr />
+<hr />
+<hr />
 <div class="container">
     <article>
         <header>
@@ -38,4 +41,29 @@
     </article>
 </div>
 <hr />
+@*<div id="commentContainer">
+    <div id=":commentEditor">
+        <div id="commentPrompt">Leave a comment!</div>
+        <form action="@Href("~/Article/Comment" + Model.Id)" method="post">
+            <textarea id="commentBodyInput" name="body" rows="10" cols="60"></textarea><br />
+            <input type="submit" id="commentSubmitInput" name="submit" value="Submit!" />
+        </form>
+    </div>
+    <a id="comments"></a>
+
+    @using (var db = new BlogDbContext())
+    {
+        foreach (var comment in db.Comments)
+        {
+            <div class="comment">
+                <div class="commentName">
+                    @comment.Name;
+                </div>
+                said:
+                <div class="commentBody">@Html.Raw(Html.Encode(comment.Body).Replace("\n", "<br/>"))</div>
+            </div>
+        }
+    }
+        
+</div>*@
 
