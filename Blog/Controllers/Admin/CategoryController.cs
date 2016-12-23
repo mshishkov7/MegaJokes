@@ -21,7 +21,7 @@ namespace Blog.Controllers.Admin
         //GET Category/List
         public ActionResult List()
         {
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var categories = database.Categories
                     .ToList();
@@ -44,7 +44,7 @@ namespace Blog.Controllers.Admin
         {
             if (ModelState.IsValid)
             {
-                using (var database = new BlogDbContext())
+                using (var database = new JokesDbContext())
                 {
                     database.Categories.Add(category);
                     database.SaveChanges();
@@ -65,7 +65,7 @@ namespace Blog.Controllers.Admin
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var category = database.Categories
                     .FirstOrDefault(c => c.Id == id);
@@ -86,7 +86,7 @@ namespace Blog.Controllers.Admin
         {
             if (ModelState.IsValid)
             {
-                using (var database = new BlogDbContext())
+                using (var database = new JokesDbContext())
                 {
                     database.Entry(category).State = EntityState.Modified;
                     database.SaveChanges();
@@ -106,7 +106,7 @@ namespace Blog.Controllers.Admin
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var category = database.Categories
                     .FirstOrDefault(c => c.Id == id);
@@ -128,7 +128,7 @@ namespace Blog.Controllers.Admin
         public ActionResult DeleteConfirmed(int? id)
         {
 
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var category = database.Categories
                      .FirstOrDefault(c => c.Id == id);

@@ -1,5 +1,4 @@
 ﻿@using Blog.Models
-@Model Blog.Models.Comment
 @model Blog.Models.Article
 
 @{
@@ -43,32 +42,32 @@
 </div>
 <hr />
 @*@*@*@*<div id="commentContainer">
-    <div id=":commentEditor">
-        <div id="commentPrompt">Leave a comment!</div>
-        <form action="@Href("~/Article/Comment" + Model.Id)" method="post">
-            <textarea id="commentBodyInput" name="body" rows="10" cols="60"></textarea><br />
-            <input type="submit" id="commentSubmitInput" name="submit" value="Submit!" />
-        </form>
-    @*</div>
-    <a id="comments"></a>
+        <div id=":commentEditor">
+            <div id="commentPrompt">Leave a comment!</div>
+            <form action="@Href("~/Article/Comment" + Model.Id)" method="post">
+                <textarea id="commentBodyInput" name="body" rows="10" cols="60"></textarea><br />
+                <input type="submit" id="commentSubmitInput" name="submit" value="Submit!" />
+            </form>
+        @*</div>
+        <a id="comments"></a>
 
-    @using (var db = new BlogDbContext())
-    {
-        foreach (var comment in db.Comments)
+        @using (var db = new BlogDbContext())
         {
-            if ( Model.Id.CompareTo(comment.ArticleId))
+            foreach (var comment in db.Comments)
             {
+                if ( Model.Id.CompareTo(comment.ArticleId))
+                {
 
-            }
-            <div class="comment">
-                <div class="commentName">
-                    @comment.Name;
+                }
+                <div class="comment">
+                    <div class="commentName">
+                        @comment.Name;
+                    </div>
+                    said:
+                    <div class="commentBody">@Html.Raw(Html.Encode(comment.Body).Replace("\n", "<br/>"))</div>
                 </div>
-                said:
-                <div class="commentBody">@Html.Raw(Html.Encode(comment.Body).Replace("\n", "<br/>"))</div>
-            </div>
+            }
         }
-    }
-        
-</div>*@*@*@*@
+
+    </div>*@*@*@*@
 

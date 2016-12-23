@@ -12,7 +12,7 @@ namespace Blog
         public void Configuration(IAppBuilder app)
         {
             Database.SetInitializer(
-                new MigrateDatabaseToLatestVersion<BlogDbContext, Configuration>());
+                new MigrateDatabaseToLatestVersion<JokesDbContext, Configuration>());
 
             ConfigureAuth(app);
         }

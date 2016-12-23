@@ -7,12 +7,14 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Blog.Models
 {
-    public class BlogDbContext : IdentityDbContext<ApplicationUser>
+    public class JokesDbContext : IdentityDbContext<ApplicationUser>
     {
-        public BlogDbContext()
+        public JokesDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
+        //public virtual IDbSet<Comment> Comments { get; set; }
 
         public virtual IDbSet<Article> Articles { get; set; }
 
@@ -20,9 +22,9 @@ namespace Blog.Models
 
         public virtual IDbSet<Tag> Tags { get; set; }
 
-        public static BlogDbContext Create()
+        public static JokesDbContext Create()
         {
-            return new BlogDbContext();
+            return new JokesDbContext();
         }
     }
 }

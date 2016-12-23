@@ -24,7 +24,7 @@ namespace Blog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var articles = database.Tags
                     .Include(t => t.Articles.Select(a => a.Tags))

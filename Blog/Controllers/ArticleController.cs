@@ -23,7 +23,7 @@ namespace Blog.Controllers
         //Get Article/List
         public ActionResult List()
         {
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var articles = database.Articles
                     .Include(a => a.Author)
@@ -33,6 +33,21 @@ namespace Blog.Controllers
                 return View(articles);
             }
         }
+
+        public ActionResult Random()
+        {
+            using (var database = new JokesDbContext())
+            {
+                var articles = database.Articles
+                    .Include(a => a.Author)
+                    .Include(a => a.Tags)
+                    .ToList();
+
+                var randomArticle = articles.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+                return View(randomArticle);
+            }
+        }
+
         //
         // Get Article/Details
         public ActionResult Details(int? id)
@@ -41,7 +56,7 @@ namespace Blog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var article = database.Articles
                     .Where(a => a.Id == id)
@@ -54,15 +69,21 @@ namespace Blog.Controllers
                     return HttpNotFound();
                 }
 
+                //var comments = database.Comments.ToList();
+
                 return View(article);
+
             }
+
+
+
         }
         //
         // GET: Article/Create
         [Authorize]
         public ActionResult Create()
         {
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var model = new ArticleViewModel();
                 model.Categories = database.Categories
@@ -81,7 +102,7 @@ namespace Blog.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var database = new BlogDbContext())
+                using (var database = new JokesDbContext())
                 {
                     var authorId = database.Users
                         .Where(u => u.UserName == this.User.Identity.Name)
@@ -114,7 +135,7 @@ namespace Blog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var article = database.Articles
                 .Where(a => a.Id == id)
@@ -149,7 +170,7 @@ namespace Blog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 //Get Article from database
                 var article = database.Articles
@@ -182,7 +203,7 @@ namespace Blog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 //Get Article from database
                 var article = database.Articles
@@ -216,7 +237,7 @@ namespace Blog.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var database = new BlogDbContext())
+                using (var database = new JokesDbContext())
                 {
                     //Get Article from database
                     var article = database.Articles
@@ -237,7 +258,7 @@ namespace Blog.Controllers
             return View(model);
         }
 
-        private void SetArticleTags(Article article, ArticleViewModel model, BlogDbContext database)
+        private void SetArticleTags(Article article, ArticleViewModel model, JokesDbContext database)
         {
             //Split tags
             var tagsStrings = model.Tags

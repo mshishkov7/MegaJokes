@@ -9,7 +9,7 @@ namespace Blog.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    public sealed class Configuration : DbMigrationsConfiguration<Blog.Models.BlogDbContext>
+    public sealed class Configuration : DbMigrationsConfiguration<Blog.Models.JokesDbContext>
     {
         public Configuration()
         {
@@ -18,7 +18,7 @@ namespace Blog.Migrations
             ContextKey = "Blog.Models.ApplicationDbContext";
         }
 
-        protected override void Seed(BlogDbContext context)
+        protected override void Seed(JokesDbContext context)
         {
             if (!context.Roles.Any())
             {
@@ -33,7 +33,7 @@ namespace Blog.Migrations
             }
         }
 
-        private void SetRoleToUser(BlogDbContext context, string email, string role)
+        private void SetRoleToUser(JokesDbContext context, string email, string role)
         {
             var userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(context));
@@ -48,7 +48,7 @@ namespace Blog.Migrations
             }
         }
 
-        private void CreateRole(BlogDbContext context, string roleName)
+        private void CreateRole(JokesDbContext context, string roleName)
         {
             var roleManager = new RoleManager<IdentityRole>(
                 new RoleStore<IdentityRole>(context));
@@ -61,7 +61,7 @@ namespace Blog.Migrations
             }
         }
 
-        private void CreateUser(BlogDbContext context, string email, string fullName, string password)
+        private void CreateUser(JokesDbContext context, string email, string fullName, string password)
         {
             var userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(context));

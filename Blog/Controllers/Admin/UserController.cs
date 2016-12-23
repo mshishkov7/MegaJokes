@@ -25,7 +25,7 @@ namespace Blog.Controllers.Admin
         //GET: User/List
         public ActionResult List()
         {
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var users = database.Users.ToList();
 
@@ -36,7 +36,7 @@ namespace Blog.Controllers.Admin
             }
         }
 
-        private HashSet<string> GetAdminUserNames(List<ApplicationUser> users, BlogDbContext context)
+        private HashSet<string> GetAdminUserNames(List<ApplicationUser> users, JokesDbContext context)
         {
             var userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(context));
@@ -63,7 +63,7 @@ namespace Blog.Controllers.Admin
             }
 
 
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var user = database.Users
                     .Where(u => u.Id == id)
@@ -91,7 +91,7 @@ namespace Blog.Controllers.Admin
         {
             if (ModelState.IsValid)
             {
-                using (var database = new BlogDbContext())
+                using (var database = new JokesDbContext())
                 {
                     var user = database.Users
                         .FirstOrDefault(u => u.Id == id);
@@ -131,7 +131,7 @@ namespace Blog.Controllers.Admin
                 return new HttpStatusCodeResult(HttpStatusCode.BadGateway);
             }
 
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 var user = database.Users
                     .Where(u=>u.Id == id)
@@ -155,7 +155,7 @@ namespace Blog.Controllers.Admin
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            using (var database = new BlogDbContext())
+            using (var database = new JokesDbContext())
             {
                 //Get user from DB
                 var user = database.Users
@@ -177,7 +177,7 @@ namespace Blog.Controllers.Admin
             }
         }
 
-        private IList<Role> GetUserRoles(ApplicationUser user, BlogDbContext db)
+        private IList<Role> GetUserRoles(ApplicationUser user, JokesDbContext db)
         {
             //create user man
             var userManager = Request
@@ -205,7 +205,7 @@ namespace Blog.Controllers.Admin
             return userRoles;
         }
 
-        private void SetUserRoles(ApplicationUser user, BlogDbContext db, EditUserViewModel model)
+        private void SetUserRoles(ApplicationUser user, JokesDbContext db, EditUserViewModel model)
         {
             var userManager = Request
                 .GetOwinContext()
